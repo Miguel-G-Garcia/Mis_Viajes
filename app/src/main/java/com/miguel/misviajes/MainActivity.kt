@@ -1,5 +1,7 @@
 package com.miguel.misviajes
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,16 +13,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(root)
-            recyclerView.adapter = ViajesAdapter(viajes)
-            recyclerView.layoutManager = GridLayoutManager(this@MainActivity, 2)
+            recyclerView.adapter = ViajesAdapter(viajes) {coordenada ->
+
+                val coordenadas = "${coordenada.latitud},${coordenada.longitud}"
+                val uri = "geo:$coordenadas?q=${Uri.encode(coordenada.texto)}"
+                val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                startActivity(mapIntent)
+            }
         }
     }
 
 
-    val viajes = (1 .. 10).map{
+    val viajes = (1 .. 100).map{
         Viaje(
-            "https://picsum.photos/200/300?random=$it",
-            "Dia $it de mis viajes"
+            "https://loremflickr.com/240/320/travel?lock=1$it",
+            "Viaje $it",
+            "40.4165000", "-3.7025600"
         )
     }
 }

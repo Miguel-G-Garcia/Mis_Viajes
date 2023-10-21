@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.miguel.misviajes.databinding.ViewViajesBinding
 import com.miguel.misviajes.model.Viaje
 
-class ViajesAdapter(val viajes: List<Viaje>): RecyclerView.Adapter<ViajesAdapter.ViewHolder>(){
+class ViajesAdapter(val viajes: List<Viaje>,  val listener: (Viaje) ->Unit): RecyclerView.Adapter<ViajesAdapter.ViewHolder>(){
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val binding = ViewViajesBinding.bind(view)
 
@@ -31,7 +31,9 @@ class ViajesAdapter(val viajes: List<Viaje>): RecyclerView.Adapter<ViajesAdapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(viajes[position])
+        val lugar = viajes[position]
+        holder.bind(lugar)
+        holder.itemView.setOnClickListener { listener(lugar) }
     }
 
 }
